@@ -40,10 +40,7 @@ $(NVIDIA_BETA_PKG): nvidia-graphics-drivers-$(NVIDIA_VERSION) $(NVIDIA_BETA_TAR)
 	   nvidia-nonglvnd-vulkan-common_$(NVIDIA_BETA_VERSION)-1_amd64.deb \
 	   nvidia-nonglvnd-vulkan-common_$(NVIDIA_BETA_VERSION)-1_i386.deb \
 	   nvidia-libopencl1_$(NVIDIA_BETA_VERSION)-1_amd64.deb \
-	   nvidia-libopencl1_$(NVIDIA_BETA_VERSION)-1_i386.deb \
-	   nvidia-driver_$(NVIDIA_BETA_VERSION)-1_i386.deb \
-	   nvidia-smi_$(NVIDIA_BETA_VERSION)-1_i386.deb \
-	   xserver-xorg-video-nvidia_$(NVIDIA_BETA_VERSION)-1_i386.deb
+	   nvidia-libopencl1_$(NVIDIA_BETA_VERSION)-1_i386.deb
 	@echo "Now run 'sudo make install' to install all the packages."
 
 .PHONY: clean
