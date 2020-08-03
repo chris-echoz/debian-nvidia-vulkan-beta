@@ -1,8 +1,8 @@
 
-NVIDIA_VERSION = 450.51
+NVIDIA_VERSION = 450.57
 NVIDIA_VERSION_DEB = 1
 
-NVIDIA_BETA_VERSION = 450.56.01
+NVIDIA_BETA_VERSION = 450.56.02
 NVIDIA_BETA_PKG = nvidia-graphics-drivers-$(NVIDIA_BETA_VERSION)
 NVIDIA_BETA_TAR = nvidia-graphics-drivers_$(NVIDIA_BETA_VERSION)
 NVIDIA_BETA_URL = https://developer.nvidia.com/vulkan-beta-$(subst .,,$(NVIDIA_BETA_VERSION))-linux
@@ -44,7 +44,6 @@ $(NVIDIA_BETA_PKG): nvidia-graphics-drivers-$(NVIDIA_VERSION) $(NVIDIA_BETA_TAR)
 	   nvidia-driver_$(NVIDIA_BETA_VERSION)-1_i386.deb \
 	   nvidia-smi_$(NVIDIA_BETA_VERSION)-1_i386.deb \
 	   xserver-xorg-video-nvidia_$(NVIDIA_BETA_VERSION)-1_i386.deb
-     
 	@echo "Now run 'sudo make install' to install all the packages."
 
 .PHONY: clean
@@ -68,4 +67,3 @@ apt-unhold:
 	apt-mark unhold $$(ls -1 *$(NVIDIA_BETA_VERSION)-1_*.deb | perl -ne '/^([\w-]*)_[\d-\.]*_(\w*)\.deb$$/ && print "$$1:$$2\n"')
 
 .PHONY: $(NVIDIA_BETA_PKG)
-
