@@ -1,3 +1,4 @@
+
 NVIDIA_VERSION = 450.51
 NVIDIA_VERSION_DEB = 1
 
@@ -7,6 +8,7 @@ NVIDIA_BETA_TAR = nvidia-graphics-drivers_$(NVIDIA_BETA_VERSION)
 NVIDIA_BETA_URL = https://developer.nvidia.com/vulkan-beta-$(subst .,,$(NVIDIA_BETA_VERSION))-linux
 NVIDIA_BETA_SRC = NVIDIA-Linux-x86_64-$(NVIDIA_BETA_VERSION).run
 
+.PHONY: all
 all: $(NVIDIA_BETA_PKG)
 
 $(NVIDIA_BETA_PKG).orig-amd64/$(NVIDIA_BETA_SRC): $(shell mkdir -p $(NVIDIA_BETA_PKG).orig-amd64)
@@ -42,6 +44,28 @@ $(NVIDIA_BETA_PKG): nvidia-graphics-drivers-$(NVIDIA_VERSION) $(NVIDIA_BETA_TAR)
 	   nvidia-driver_$(NVIDIA_BETA_VERSION)-1_i386.deb \
 	   nvidia-smi_$(NVIDIA_BETA_VERSION)-1_i386.deb \
 	   xserver-xorg-video-nvidia_$(NVIDIA_BETA_VERSION)-1_i386.deb
+     
+	@echo "Now run 'sudo make install' to install all the packages."
 
-	echo "Now run 'sudo dpkg -i *$(NVIDIA_BETA_VERSION)-1_{amd64,i386}.deb' to install all the packages."
+.PHONY: clean
+clean:
+	rm -rf nvidia-graphics-drivers*
+	rm -f *.deb
+
+.PHONY: install
+install: dpkg-install apt-hold
+
+.PHONY: dpkg-install
+dpkg-install:
+	dpkg -i *$(NVIDIA_BETA_VERSION)-1_*.deb
+
+.PHONY: apt-hold
+apt-hold:
+	apt-mark hold $$(ls -1 *$(NVIDIA_BETA_VERSION)-1_*.deb | perl -ne '/^([\w-]*)_[\d-\.]*_(\w*)\.deb$$/ && print "$$1:$$2\n"')
+
+.PHONY: apt-unhold
+apt-unhold:
+	apt-mark unhold $$(ls -1 *$(NVIDIA_BETA_VERSION)-1_*.deb | perl -ne '/^([\w-]*)_[\d-\.]*_(\w*)\.deb$$/ && print "$$1:$$2\n"')
+
 .PHONY: $(NVIDIA_BETA_PKG)
+
