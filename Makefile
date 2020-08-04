@@ -26,6 +26,7 @@ $(NVIDIA_BETA_TAR).orig.tar.gz: $(NVIDIA_BETA_PKG).orig
 nvidia-graphics-drivers-$(NVIDIA_VERSION):
 	apt source nvidia-driver=$(NVIDIA_VERSION)-$(NVIDIA_VERSION_DEB)
 
+.PHONY: $(NVIDIA_BETA_PKG)
 $(NVIDIA_BETA_PKG): nvidia-graphics-drivers-$(NVIDIA_VERSION) $(NVIDIA_BETA_TAR).orig.tar.gz $(NVIDIA_BETA_TAR).orig-amd64.tar.gz
 	rm -rf $@
 	cd nvidia-graphics-drivers-$(NVIDIA_VERSION) && uupdate -b -f -v $(NVIDIA_BETA_VERSION)
@@ -40,7 +41,12 @@ $(NVIDIA_BETA_PKG): nvidia-graphics-drivers-$(NVIDIA_VERSION) $(NVIDIA_BETA_TAR)
 	   nvidia-nonglvnd-vulkan-common_$(NVIDIA_BETA_VERSION)-1_amd64.deb \
 	   nvidia-nonglvnd-vulkan-common_$(NVIDIA_BETA_VERSION)-1_i386.deb \
 	   nvidia-libopencl1_$(NVIDIA_BETA_VERSION)-1_amd64.deb \
-	   nvidia-libopencl1_$(NVIDIA_BETA_VERSION)-1_i386.deb
+	   nvidia-libopencl1_$(NVIDIA_BETA_VERSION)-1_i386.deb #\
+	   # These don't seem to get built as of 450.57. the i386 versions of these in experimental are still on 450.51
+	   #nvidia-driver_$(NVIDIA_BETA_VERSION)-1_i386.deb \
+	   #nvidia-smi_$(NVIDIA_BETA_VERSION)-1_i386.deb \
+	   #xserver-xorg-video-nvidia_$(NVIDIA_BETA_VERSION)-1_i386.deb
+
 	@echo "Now run 'sudo make install' to install all the packages."
 
 .PHONY: clean
@@ -62,5 +68,3 @@ apt-hold:
 .PHONY: apt-unhold
 apt-unhold:
 	apt-mark unhold $$(ls -1 *$(NVIDIA_BETA_VERSION)-1_*.deb | perl -ne '/^([\w-]*)_[\d-\.]*_(\w*)\.deb$$/ && print "$$1:$$2\n"')
-
-.PHONY: $(NVIDIA_BETA_PKG)
